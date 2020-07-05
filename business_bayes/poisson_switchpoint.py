@@ -18,7 +18,7 @@ def make_switchpoint_model(counts: ndarray, prior_lambda: float):
     counts :
         1 - dimensional array of counts
     prior_lambda :
-        parameter for exponential prior; 1 / prior_lambda is the mean of the exponential
+        rate parameter for exponential prior; 1 / prior_lambda is the mean of the exponential
 
 
     Returns
