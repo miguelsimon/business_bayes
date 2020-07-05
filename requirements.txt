@@ -3,3 +3,7 @@ numpy
 matplotlib
 pandas
 pymc3
+mypy
+flake8
+black
+isort
