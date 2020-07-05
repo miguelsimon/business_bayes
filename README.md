@@ -4,4 +4,7 @@ Here are some questions I encounter in my day job that pop up again and again an
 
 * **Are today's sales lower than yesterday's because of random fluctuation, or should I be worried?**
   * problem description: [day_to_day_sales.ipynb](day_to_day_sales.ipynb)
-  * implementation: TODO
+  * report utility: TODO
+* **We have a timeseries of sales events: is there a point in time at which the sales rate suddenly changes?**
+  * problem description: TODO
+  * report utility: [switchpoint_report.ipynb](switchpoint_report.ipynb)
