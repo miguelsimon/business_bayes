@@ -28,7 +28,9 @@ class Binomials:
 
     def model_1_prob(self, count_1, trials_1, count_2, trials_2):
         def f(p):
-            return binom.pmf(count_1, trials_1, p) * binom.pmf(count_2, trials_2, p)
+            ll = binom.logpmf(count_1, trials_1, p)
+            ll += binom.logpmf(count_2, trials_2, p)
+            return np.exp(ll)
 
         return scipy.integrate.quad(f, 0, 1)
 
