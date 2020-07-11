@@ -1,11 +1,16 @@
+import abc
 import unittest
-from typing import Callable, List
+from typing import List
 
 import numpy as np
 from numpy import ndarray
 
 
 def observe(p: ndarray, i: int, p_found_given_box: float) -> ndarray:
+    """
+    Get the posterior given the prior and the fact that box i has been searched
+    and the object has not been found.
+    """
     assert isinstance(p, ndarray)
 
     p_not_found_given_box = 1 - p_found_given_box
@@ -17,6 +22,12 @@ def observe(p: ndarray, i: int, p_found_given_box: float) -> ndarray:
 
 
 def choose_next(p: ndarray, p_found_given_box: ndarray, costs: ndarray) -> int:
+    """
+    Apparently David Blackwell proved that the optimal search policy for
+    this is choosing the index which maximizes:
+
+        (p[i] * p_found_given_box[i]) / costs[i]
+    """
     assert isinstance(p, ndarray)
     assert isinstance(p_found_given_box, ndarray)
 
@@ -24,7 +35,32 @@ def choose_next(p: ndarray, p_found_given_box: ndarray, costs: ndarray) -> int:
     return to_maximize.argmax()
 
 
-class BayesianSearch:
+class Search(metaclass=abc.ABCMeta):
+    """
+    Interface to specify a search algorithm
+    """
+
+    @abc.abstractmethod
+    def search_next(self) -> int:
+        """
+        Return the index of the next box to be searched.
+        """
+        ...
+
+    @abc.abstractmethod
+    def observe(self, i: int):
+        """
+        Register the fact that box i has been searched and the object has not
+        been found.
+        """
+        ...
+
+
+class BayesianSearch(Search):
+    """
+    Implementation of the classic bayesian search algorithm.
+    """
+
     ps: List[ndarray]
     p_found_given_box: ndarray
     costs: ndarray
@@ -45,7 +81,13 @@ class BayesianSearch:
         self.ps.append(p_new)
 
 
-class RandomSearch:
+class RandomSearch(Search):
+    """
+    Random search simply chooses a box index at random each time.
+    This is useful as a baseline to compare against the bayesian search
+    algorithm.
+    """
+
     costs: ndarray
 
     def __init__(self, p0: ndarray, p_found_given_box: ndarray, costs: ndarray):
@@ -59,20 +101,32 @@ class RandomSearch:
 
 
 class Simulate:
+    """
+    Run a search simulation given a problem specification and a search algorithm.
+
+    Parameters
+    ----------
+
+    p0 :
+        initial probabilities for location
+    p_found_given_box :
+        probability for finding the object at box i after a search given that the
+        object is indeed located at box i
+    costs :
+        cost of searching box i
+    search :
+        search algorithm, follows the Search interface
+
+    """
+
     def __init__(
-        self,
-        p0: ndarray,
-        p_found_given_box: ndarray,
-        costs: ndarray,
-        search_next: Callable[[], int],
-        observe: Callable[[int], None],
+        self, p0: ndarray, p_found_given_box: ndarray, costs: ndarray, search: Search
     ):
 
         self.p_found_given_box = p_found_given_box
         self.costs = costs
 
-        self.search_next = search_next
-        self.observe = observe
+        self.search = search
 
         self.cost = 0
         self.found = False
@@ -83,7 +137,7 @@ class Simulate:
         if self.found:
             raise Exception
 
-        i = self.search_next()
+        i = self.search.search_next()
 
         if i == self.at_idx:
             p = self.p_found_given_box[i]
@@ -92,7 +146,7 @@ class Simulate:
         if self.found:
             return True
         else:
-            self.observe(i)
+            self.search.observe(i)
             return False
 
     def run(self) -> float:
@@ -109,7 +163,7 @@ class Test(unittest.TestCase):
 
         search = BayesianSearch(p0, p_found_given_box, costs)
 
-        sim = Simulate(p0, p_found_given_box, costs, search.search_next, search.observe)
+        sim = Simulate(p0, p_found_given_box, costs, search)
 
         sim.run()
 
@@ -120,6 +174,6 @@ class Test(unittest.TestCase):
 
         search = RandomSearch(p0, p_found_given_box, costs)
 
-        sim = Simulate(p0, p_found_given_box, costs, search.search_next, search.observe)
+        sim = Simulate(p0, p_found_given_box, costs, search)
 
         sim.run()

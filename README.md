@@ -17,7 +17,9 @@ Here are some questions I encounter in my day job that pop up again and again an
 * **We have a timeseries of sales events: is there a point in time at which the sales rate suddenly changes?**
   * problem description: TODO
   * report utility: [switchpoint_report.ipynb](switchpoint_report.ipynb)
-
+* **What's causing the current sales slump? Bayesian Search Theory: not just for finding nuclear subs**
+  * problem description: [bayesian_search_theory.ipynb](bayesian_search_theory.ipynb)
+  * utility: TODO
 
 ### Prerequisites
 
