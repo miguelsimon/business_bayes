@@ -5,8 +5,8 @@ Here are some questions I encounter in my day job that pop up again and again an
 * [The questions](#The-questions)
   * [Are today's sales lower than yesterday's because of random fluctuation, or should I be worried?](Are-today's-sales-lower-than-yesterday's-because-of-random-fluctuation,-or-should-I-be-worried?)
   * [Is today's conversion rate lower than yesterday's because of random fluctuation, or should I be worried?](#Is-today's-conversion-rate-lower-than-yesterday's-because-of-random-fluctuation,-or-should-I-be-worried?)
-  * [We have a timeseries of sales events: is there a point in time at which the sales rate suddenly changes?](#We-have-a-timeseries-of-sales-events:-is-there-a-point-in-time-at-which-the-sales-rate-suddenly-changes?)
-  * [What's causing the current sales slump? Bayesian Search Theory: not just for finding nuclear subs](#What's-causing-the-current-sales-slump?-Bayesian-Search-Theory:-not-just-for-finding-nuclear-subs)
+  * [We have a timeseries of sales events, is there a point in time at which the sales rate suddenly changes?](#We-have-a-timeseries-of-sales-events,-is-there-a-point-in-time-at-which-the-sales-rate-suddenly-changes?)
+  * [What's causing the current sales slump? Bayesian Search Theory is not just for finding nuclear subs](#What's-causing-the-current-sales-slump?-Bayesian-Search-Theory-is-not-just-for-finding-nuclear-subs)
 * [Prerequisites](#Prerequisites)
 * [Usage](#Usage)
 
@@ -21,12 +21,12 @@ Here are some questions I encounter in my day job that pop up again and again an
   * problem description: TODO
   * report utility: [binomial_model_comparison_utility.ipynb](binomial_model_comparison_utility.ipynb)
 
-#### We have a timeseries of sales events: is there a point in time at which the sales rate suddenly changes?
+#### We have a timeseries of sales events, is there a point in time at which the sales rate suddenly changes?
 
   * problem description: TODO
   * report utility: [switchpoint_report.ipynb](switchpoint_report.ipynb)
 
-#### What's causing the current sales slump? Bayesian Search Theory: not just for finding nuclear subs
+#### What's causing the current sales slump? Bayesian Search Theory is not just for finding nuclear subs
 
   * problem description: [bayesian_search_theory.ipynb](bayesian_search_theory.ipynb)
   * utility: TODO
