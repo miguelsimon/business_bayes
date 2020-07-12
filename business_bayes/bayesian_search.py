@@ -10,6 +10,23 @@ def observe(p: ndarray, i: int, p_found_given_box: float) -> ndarray:
     """
     Get the posterior given the prior and the fact that box i has been searched
     and the object has not been found.
+
+    Parameters
+    ----------
+
+    p :
+        prior distribution of object location probabilities
+    i :
+        index of box that was searched
+    p_found_given_box :
+        probability for finding the object at box i after a search given that the
+        object is indeed located at box i
+
+    Returns
+    -------
+
+    ndarray :
+        posterior probabilities
     """
     assert isinstance(p, ndarray)
 
@@ -27,6 +44,24 @@ def choose_next(p: ndarray, p_found_given_box: ndarray, costs: ndarray) -> int:
     this is choosing the index which maximizes:
 
         (p[i] * p_found_given_box[i]) / costs[i]
+
+
+    Parameters
+    ----------
+
+    p :
+        distribution of object location probabilities
+    p_found_given_box :
+        probability for finding the object at box i after a search given that the
+        object is indeed located at box i
+    costs :
+        costs[i] is the cost of searching box[i]
+
+    Returns
+    -------
+
+    int :
+        index of box to be searched
     """
     assert isinstance(p, ndarray)
     assert isinstance(p_found_given_box, ndarray)
@@ -107,7 +142,24 @@ def perform_search(
     next_box_idx: int, location_idx: int, p_found_given_box: ndarray
 ) -> bool:
     """
-    Stand-in for performing a search: return True if found, False otherwise
+    Stand-in for a real search
+
+    Parameters
+    ----------
+
+    next_box_idx :
+        index of box to be searched
+    location_idx :
+        index of the true location of object
+    p_found_given_box :
+        probability for finding the object at box i after a search given that the
+        object is indeed located at box i
+
+    Returns
+    -------
+
+    bool :
+        True if the object was found, False otherwise
     """
     if next_box_idx == location_idx:
         prob = p_found_given_box[location_idx]
@@ -120,6 +172,29 @@ def perform_search(
 def simulate_bayes(
     p0: ndarray, p_found_given_box: ndarray, costs: ndarray, location_idx: int,
 ) -> float:
+    """
+    Runs a simulated bayes search step; probability of finding the object is sampled
+    by using the p_found_given_box distribution.
+
+    Parameters
+    ----------
+
+    p0 :
+        initial probabilities for location
+    p_found_given_box :
+        probability for finding the object at box i after a search given that the
+        object is indeed located at box i
+    costs :
+        cost of searching box i
+    location_idx :
+        true location of the object
+
+    Returns
+    -------
+
+    float :
+        cost
+    """
 
     cost = 0
     p = p0
@@ -139,6 +214,27 @@ def simulate_bayes(
 def simulate_random(
     p_found_given_box: ndarray, costs: ndarray, location_idx: int,
 ) -> float:
+    """
+    Runs a simulated random search step; probability of finding the object is sampled
+    by using the p_found_given_box distribution.
+
+    Parameters
+    ----------
+
+    p_found_given_box :
+        probability for finding the object at box i after a search given that the
+        object is indeed located at box i
+    costs :
+        cost of searching box i
+    location_idx :
+        true location of the object
+
+    Returns
+    -------
+
+    float :
+        cost
+    """
 
     cost = 0
     n = len(costs)
@@ -153,102 +249,7 @@ def simulate_random(
     return cost
 
 
-class Simulate:
-    """
-    Run a search simulation given a problem specification and a search algorithm.
-
-    Parameters
-    ----------
-
-    p0 :
-        initial probabilities for location
-    p_found_given_box :
-        probability for finding the object at box i after a search given that the
-        object is indeed located at box i
-    costs :
-        cost of searching box i
-    location_idx :
-        true location of the object
-    search :
-        search algorithm, follows the Search interface
-
-    """
-
-    def __init__(
-        self,
-        p0: ndarray,
-        p_found_given_box: ndarray,
-        costs: ndarray,
-        location_idx: int,
-        search: Search,
-    ):
-
-        self.p_found_given_box = p_found_given_box
-        self.costs = costs
-        self.location_idx = location_idx
-        self.search = search
-
-        self.cost = 0
-        self.found = False
-
-    def step(self) -> bool:
-        if self.found:
-            raise Exception
-
-        i = self.search.search_next()
-        self.cost += self.costs[i]
-
-        if i == self.location_idx:
-            p = self.p_found_given_box[i]
-            found = np.random.binomial(1, p)
-            self.found = found == 1
-
-        if self.found:
-            return True
-        else:
-            self.search.observe(i)
-            return False
-
-    def run(self) -> float:
-        while self.step() == False:
-            pass
-        return self.cost
-
-
-def gather_data_points(p0, p_found_given_box, costs, location_idx, cls, num=10000):
-    total_costs = []
-
-    for i in range(num):
-        np.random.seed(i)
-        search = cls(p0, p_found_given_box, costs)
-        sim = Simulate(p0, p_found_given_box, costs, location_idx, search)
-        total_costs.append(sim.run())
-    return total_costs
-
-
 class Test(unittest.TestCase):
-    def test_bayesian(self):
-        p0 = np.array([0.5, 0.5])
-        p_found_given_box = np.array([0.5, 0.5])
-        costs = np.array([1, 1])
-
-        search = BayesianSearch(p0, p_found_given_box, costs)
-
-        sim = Simulate(p0, p_found_given_box, costs, 0, search)
-
-        sim.run()
-
-    def test_random(self):
-        p0 = np.array([0.5, 0.5])
-        p_found_given_box = np.array([0.5, 0.5])
-        costs = np.array([1, 1])
-
-        search = RandomSearch(p0, p_found_given_box, costs)
-
-        sim = Simulate(p0, p_found_given_box, costs, 0, search)
-
-        sim.run()
-
     def test_means(self):
         n = 20
         location_idx = 19
@@ -256,12 +257,13 @@ class Test(unittest.TestCase):
         p_found_given_box = np.ones(n) * 0.1
         costs = np.ones(n)
 
-        bayes_costs = gather_data_points(
-            p0, p_found_given_box, costs, location_idx, BayesianSearch
-        )
-        random_costs = gather_data_points(
-            p0, p_found_given_box, costs, location_idx, RandomSearch
-        )
+        bayes_costs = [
+            simulate_bayes(p0, p_found_given_box, costs, location_idx)
+            for _ in range(1000)
+        ]
+        random_costs = [
+            simulate_random(p_found_given_box, costs, location_idx) for _ in range(1000)
+        ]
 
         bayes_mean = np.mean(bayes_costs)
         random_mean = np.mean(random_costs)
@@ -275,12 +277,13 @@ class Test(unittest.TestCase):
         p_found_given_box = np.ones(n) * 0.1
         costs = np.ones(n)
 
-        bayes_costs = gather_data_points(
-            p0, p_found_given_box, costs, location_idx, BayesianSearch
-        )
-        random_costs = gather_data_points(
-            p0, p_found_given_box, costs, location_idx, RandomSearch
-        )
+        bayes_costs = [
+            simulate_bayes(p0, p_found_given_box, costs, location_idx)
+            for _ in range(1000)
+        ]
+        random_costs = [
+            simulate_random(p_found_given_box, costs, location_idx) for _ in range(1000)
+        ]
 
         bayes_mean = np.mean(bayes_costs)
         random_mean = np.mean(random_costs)

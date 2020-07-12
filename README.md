@@ -2,6 +2,8 @@
 
 Here are some questions I encounter in my day job that pop up again and again and are subtler than they appear. I'm attempting to follow E. T. Jaynes's advice of relentlessly dissecting real problems until I understand them.
 
+The report utilities are ipython notebooks, prepared so you can just plug in the numbers to get quick answers.
+
 * [The questions](#The-questions)
   * [Are today's sales lower than yesterday's because of random fluctuation, or should I be worried?](Are-today's-sales-lower-than-yesterday's-because-of-random-fluctuation,-or-should-I-be-worried?)
   * [Is today's conversion rate lower than yesterday's because of random fluctuation, or should I be worried?](#Is-today's-conversion-rate-lower-than-yesterday's-because-of-random-fluctuation,-or-should-I-be-worried?)
