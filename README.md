@@ -1,34 +1,43 @@
 ## Overview
 
-Here are some questions I encounter in my day job that pop up again and again and are subtler than they appear. I'm attempting to follow E. T. Jaynes's advice of relentlessly dissecting real problems until I understand them.
+Here are some problems I encounter in my day job that pop up again and again and are subtler than they appear. I'm attempting to follow E. T. Jaynes's advice of relentlessly dissecting real problems until I understand them.
 
 The report utilities are ipython notebooks, prepared so you can just plug in the numbers to get quick answers.
 
-* [The questions](#The-questions)
-  * [Are today's sales lower than yesterday's because of random fluctuation, or should I be worried?](Are-today's-sales-lower-than-yesterday's-because-of-random-fluctuation,-or-should-I-be-worried?)
-  * [Is today's conversion rate lower than yesterday's because of random fluctuation, or should I be worried?](#Is-today's-conversion-rate-lower-than-yesterday's-because-of-random-fluctuation,-or-should-I-be-worried?)
-  * [We have a timeseries of sales events, is there a point in time at which the sales rate suddenly changes?](#We-have-a-timeseries-of-sales-events,-is-there-a-point-in-time-at-which-the-sales-rate-suddenly-changes?)
-  * [What's causing the current sales slump? Bayesian Search Theory is not just for finding nuclear subs](#What's-causing-the-current-sales-slump?-Bayesian-Search-Theory-is-not-just-for-finding-nuclear-subs)
+* [Index](#Index)
+  * [Changes in sales over time](#Changes-in-sales-over-time)
+  * [Conversion rate changes](#Conversion-rate-changes)
+  * [Finding change points in sales timeseries](#Finding-change-points-in-sales-timeseries)
+  * [Finding bugs with Bayesian Search Theory](#Finding-bugs-with-Bayesian-Search-Theory)
 * [Prerequisites](#Prerequisites)
 * [Usage](#Usage)
 
-### The questions
+### Index
 
-#### Are today's sales lower than yesterday's because of random fluctuation, or should I be worried?
+#### Changes in sales over time
+
+  Are today's sales lower than yesterday's because of random fluctuation, or is it likely there's an underlying cause for the change?
+
   * problem description: [day_to_day_sales.ipynb](day_to_day_sales.ipynb)
   * report utility: TODO
 
-#### Is today's conversion rate lower than yesterday's because of random fluctuation, or should I be worried?
+#### Conversion rate changes
+
+  Are the changes in conversion rate I'm seeing due to random fluctuations, or is it likely there's an underlying cause?
 
   * problem description: TODO
   * report utility: [binomial_model_comparison_utility.ipynb](binomial_model_comparison_utility.ipynb)
 
-#### We have a timeseries of sales events, is there a point in time at which the sales rate suddenly changes?
+#### Finding change points in sales timeseries
+
+  Given a timeseries of sales over time, can we find a point where the sales rate changes significantly?
 
   * problem description: TODO
   * report utility: [switchpoint_report.ipynb](switchpoint_report.ipynb)
 
-#### What's causing the current sales slump? Bayesian Search Theory is not just for finding nuclear subs
+#### Finding bugs with Bayesian Search Theory
+
+  Bayesian search theory is not just for finding nuclear subs.
 
   * problem description: [bayesian_search_theory.ipynb](bayesian_search_theory.ipynb)
   * utility: TODO
