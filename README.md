@@ -19,7 +19,7 @@ The report utilities are ipython notebooks, prepared so you can just plug in the
   Are today's sales lower than yesterday's because of random fluctuation, or is it likely there's an underlying cause for the change?
 
   * problem description: [day_to_day_sales.ipynb](day_to_day_sales.ipynb)
-  * report utility: TODO
+  * report utility: [poisson_model_comparison_utility.ipynb](poisson_model_comparison_utility.ipynb)
 
 #### Conversion rate changes
 
@@ -31,6 +31,8 @@ The report utilities are ipython notebooks, prepared so you can just plug in the
 #### Finding change points in sales timeseries
 
   Given a timeseries of sales over time, can we find a point where the sales rate changes significantly?
+
+  Current implementation finds 1 possible change point, need to get around to implementing reversible jump markov chain monte carlo for the general case as described in [Reversible Jump Markov Chain Monte Carlo Computation and Bayesian Model Determination](https://doi.org/10.1093%2Fbiomet%2F82.4.711) by Green.
 
   * problem description: TODO
   * report utility: [switchpoint_report.ipynb](switchpoint_report.ipynb)

@@ -75,4 +75,16 @@ class Test(unittest.TestCase):
         self.assertTrue(abs(bits) < 3)
 
         bits = b.bayes_factor_bits(np.array([11]), np.array([0]))
-        self.assertTrue(bits < 3)
+        self.assertTrue(bits < -1.6)
+
+    def test_PoissonModels_array(self):
+        b = PoissonModels(1)
+
+        bits = b.bayes_factor_bits(np.array([50, 50, 50]), np.array([50]))
+        self.assertTrue(bits > 3)
+
+        bits = b.bayes_factor_bits(np.array([50, 30, 50]), np.array([50, 30, 50]))
+        self.assertTrue(abs(bits) > 3)
+
+        bits = b.bayes_factor_bits(np.array([11, 11]), np.array([0]))
+        self.assertTrue(bits < -1.6)
