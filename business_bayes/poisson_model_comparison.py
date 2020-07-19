@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 import scipy
-from scipy.stats import expon, poisson
+from scipy.stats import poisson
 
 
 class PoissonModels:
@@ -10,52 +10,69 @@ class PoissonModels:
     Compare two Poisson models for the same situation via calculating bayes factors
 
     Model 1: both counts depend on a single Poisson rate
-        mu ~ Exponential(scale)
+        mu ~ LogUniform(a, b)
         counts1[i] ~ Poisson(mu)
         counts2[i] ~ Poisson(mu)
 
     Model 2: counts in each set depend on their own Poisson rate
-        mu1 ~ Exponential(scale)
-        mu2 ~ Exponential(scale)
+        mu1 ~ LogUniform(a, b)
+        mu2 ~ LogUniform(a, b)
         counts1[i] ~ Poisson(mu1)
         counts2[i] ~ Poisson(mu1)
 
     Parameters
     ----------
-
-    scale :
-        scale parameter for the exponential prior for Poisson rates
+    a :
+        lower bound on rate
+    b :
+        upper bound on rate
     """
 
-    scale: float
+    a: float
+    b: float
 
-    def __init__(self, scale):
-        self.scale = scale
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
 
     def model_1_prob(self, counts1, counts2):
-        def f(mu):
-            ll = poisson.logpmf(counts1, mu).sum()
-            ll += poisson.logpmf(counts2, mu).sum()
-            ll += expon.logpdf(mu, self.scale)
+        a = self.a
+        b = self.b
+
+        constant = np.log(b) - np.log(a)
+
+        def f(x):
+            ll = poisson.logpmf(counts1, x).sum()
+            ll += poisson.logpmf(counts2, x).sum()
+            ll -= np.log(x)
 
             return np.exp(ll)
 
-        return scipy.integrate.quad(f, 0, np.inf)
+        return scipy.integrate.quad(f, a, b) / constant
 
     def model_2_prob(self, counts1, counts2):
+        a = self.a
+        b = self.b
 
-        gfun = lambda x: 0
-        hfun = lambda x: np.inf
+        constant = np.log(b) - np.log(a)
 
-        def f(mu1, mu2):
-            ll = poisson.logpmf(counts1, mu1).sum()
-            ll += poisson.logpmf(counts2, mu2).sum()
-            ll += expon.logpdf(mu1, self.scale)
-            ll += expon.logpdf(mu2, self.scale)
-
+        def f1(x):
+            ll = poisson.logpmf(counts1, x).sum()
+            ll -= np.log(x)
             return np.exp(ll)
 
-        return scipy.integrate.dblquad(f, 0, np.inf, gfun, hfun)
+        def f2(x):
+            ll = poisson.logpmf(counts2, x).sum()
+            ll -= np.log(x)
+            return np.exp(ll)
+
+        term1 = scipy.integrate.quad(f1, a, b)
+        term2 = scipy.integrate.quad(f2, a, b)
+
+        res = term1[0] * term2[0] / (constant * constant)
+        err = max(term1[1], term2[1]) / (constant * constant)
+
+        return [res, err]
 
     def bayes_factor_bits(self, counts1, counts2):
         res_1 = self.model_1_prob(counts1, counts2)
@@ -66,7 +83,7 @@ class PoissonModels:
 
 class Test(unittest.TestCase):
     def test_PoissonModels(self):
-        b = PoissonModels(1)
+        b = PoissonModels(1 / 100, 100)
 
         bits = b.bayes_factor_bits(np.array([50]), np.array([50]))
         self.assertTrue(bits > 3)
@@ -78,7 +95,7 @@ class Test(unittest.TestCase):
         self.assertTrue(bits < -1.6)
 
     def test_PoissonModels_array(self):
-        b = PoissonModels(1)
+        b = PoissonModels(1 / 100, 100)
 
         bits = b.bayes_factor_bits(np.array([50, 50, 50]), np.array([50]))
         self.assertTrue(bits > 3)
