@@ -18,7 +18,8 @@ The report utilities are ipython notebooks, prepared so you can just plug in the
 
   Are today's sales lower than yesterday's because of random fluctuation, or is it likely there's an underlying cause for the change?
 
-  * problem description: [day_to_day_sales.ipynb](day_to_day_sales.ipynb)
+  * problem description (TODO: fix this): [day_to_day_sales.ipynb](day_to_day_sales.ipynb)
+  * model comparison math: [poisson_model_comparison_derivation.ipynb](poisson_model_comparison_derivation.ipynb)
   * report utility: [poisson_model_comparison_utility.ipynb](poisson_model_comparison_utility.ipynb)
 
 #### Conversion rate changes
